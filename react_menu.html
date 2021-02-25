@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+  <html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <title>react menu</title>
+
+    <script src="https://unpkg.com/react@latest/umd/react.development.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@latest/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@material-ui/core@latest/umd/material-ui.development.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/babel-standalone@latest/babel.min.js" crossorigin="anonymous"></script>
+    <!-- Fonts to support Material Design -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Icons to support Material Design -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
+
+  <script type="text/babel" crossorigin >
+    const options = [
+      'None',
+      'Atria',
+      'Callisto',
+      'Dione',
+      'Ganymede',
+      'Hangouts Call',
+      'Luna',
+      'Oberon',
+      'Phobos',
+      'Pyxis',
+      'Sedna',
+      'Titania',
+      'Triton',
+      'Umbriel',
+    ];
+
+    const ITEM_HEIGHT = 48;
+
+    class App extends React.Component {
+      constructor(props){
+        super(props);
+      }
+      render(){
+        return (
+          <div>
+            <ul>
+              <li>
+                <p>シンプルなmenu</p>
+                <SimpleMenu/>
+              </li>
+              <li>
+                <p>最大高さmenu</p>
+                <LongMenu/>
+              </li>
+            </ul>
+          </div>
+        )
+      }
+    }
+
+    function SimpleMenu() {
+      const [anchorEl, setAnchorEl] = React.useState(null);
+
+      const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+      };
+
+      const handleClose = () => {
+        setAnchorEl(null);
+      };
+
+      return (
+        <div>
+          <Button variant="contained" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+            Open Menu
+          </Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem onClick={handleClose}>My account</MenuItem>
+            <MenuItem onClick={handleClose}>Logout</MenuItem>
+          </Menu>
+        </div>
+      );
+    }
+
+    function LongMenu() {
+     const [anchorEl, setAnchorEl] = React.useState(null);
+     const open = Boolean(anchorEl);
+
+     const handleClick = (event) => {
+       setAnchorEl(event.currentTarget);
+     };
+
+     const handleClose = () => {
+       setAnchorEl(null);
+     };
+
+     return (
+       <div>
+         <Button variant="outlined" onClick={handleClick} color="primary">
+           Open menu
+         </Button>
+         <Menu
+           id="long-menu"
+           anchorEl={anchorEl}
+           keepMounted
+           open={open}
+           onClose={handleClose}
+           PaperProps={{
+             style: {
+               maxHeight: ITEM_HEIGHT * 4.5,
+               width: '20ch',
+             },
+           }}
+         >
+           {options.map((option) => (
+             <MenuItem key={option} selected={option === 'Pyxis'} onClick={handleClose}>
+               {option}
+             </MenuItem>
+           ))}
+         </Menu>
+
+       </div>
+     );
+    }
+
+  </script>
+
+  </head>
+  <body>
+    <div id="root" > wait ...</div>
+    <script type="text/babel"crossorigin >
+      const {
+        Button,
+        TextField,
+        Menu,
+        MenuItem,
+        IconButton,
+      } = MaterialUI;
+      //JSX
+      ReactDOM.render(
+        <App/>,
+        document.querySelector('#root')
+        );
+    </script>
+
+  </body>
+</html>

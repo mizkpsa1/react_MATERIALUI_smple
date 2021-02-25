@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+  <html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <title>react snackbar</title>
+
+    <script src="https://unpkg.com/react@latest/umd/react.development.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@latest/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@material-ui/core@latest/umd/material-ui.development.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/babel-standalone@latest/babel.min.js" crossorigin="anonymous"></script>
+    <!-- Fonts to support Material Design -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Icons to support Material Design -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
+
+  <script type="text/babel" crossorigin >
+
+    class App extends React.Component {
+      constructor(props){
+        super(props);
+      }
+      render(){
+        return (
+          <div>
+            <ul>
+              <li>
+                <p>シンプルなsnakbar</p>
+                <SimpleSnackbar/>
+              </li>
+              <li>
+                <p>配置されたsnackbar</p>
+                <PositionedSnackbar/>
+              </li>
+              <li>
+                <p>配置されたsnackbar</p>
+                <DirectionSnackbar/>
+              </li>
+            </ul>
+          </div>
+        )
+      }
+    }
+
+    function SimpleSnackbar() {
+      const [open, setOpen] = React.useState(false);
+      const handleClick = () => {
+        setOpen(true);
+      };
+      const handleClose = () => {
+        setOpen(false);
+      };
+      const back = (
+        <Button color="secondary" size="small" onClick={handleClose}>
+          lorem ipsum dolorem
+        </Button>
+      );
+      const act=(
+        <SnackbarContent message="I like cupcakes."  action={back}/>
+      )
+
+      return (
+        <div>
+          <Button onClick={handleClick}  variant="contained">Open simple snackbar</Button>
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            open={open}
+            autoHideDuration={6000}
+            onClose={handleClose}
+            message="Note archived"
+            action={act}
+          />
+        </div>
+      );
+    }
+
+    function PositionedSnackbar() {
+      const [state, setState] = React.useState({
+        open: false,
+        vertical: 'top',
+        horizontal: 'center',
+      });
+      const { vertical, horizontal, open } = state;
+      const handleClick = (newState) => () => {
+        setState({ open: true, ...newState });
+      };
+      const handleClose = () => {
+        setState({ ...state, open: false });
+      };
+      const buttons = (
+        <React.Fragment>
+        <ButtonGroup size="small" aria-label="small outlined button group">
+          <Button onClick={handleClick({ vertical: 'top', horizontal: 'center' })}>Top-Center</Button>
+          <Button onClick={handleClick({ vertical: 'top', horizontal: 'right' })}>Top-Right</Button>
+          <Button onClick={handleClick({ vertical: 'bottom', horizontal: 'right' })}>
+            Bottom-Right
+          </Button>
+          <Button onClick={handleClick({ vertical: 'bottom', horizontal: 'center' })}>
+            Bottom-Center
+          </Button>
+          <Button onClick={handleClick({ vertical: 'bottom', horizontal: 'left' })}>Bottom-Left</Button>
+          <Button onClick={handleClick({ vertical: 'top', horizontal: 'left' })}>Top-Left</Button>
+        </ButtonGroup>
+        </React.Fragment>
+      );
+
+      return (
+        <div>
+          {buttons}
+          <Snackbar
+            anchorOrigin={{ vertical, horizontal }}
+            open={open}
+            onClose={handleClose}
+            message="I love snacks"
+            key={vertical + horizontal}
+          />
+        </div>
+      );
+    }
+
+    function TransitionLeft(props) {
+      return <Slide {...props} direction="left" />;
+    }
+    function TransitionUp(props) {
+      return <Slide {...props} direction="up" />;
+    }
+    function TransitionRight(props) {
+      return <Slide {...props} direction="right" />;
+    }
+    function TransitionDown(props) {
+      return <Slide {...props} direction="down" />;
+    }
+    function DirectionSnackbar() {
+      const [open, setOpen] = React.useState(false);
+      const [transition, setTransition] = React.useState(undefined);
+      const handleClick = (Transition) => () => {
+        setTransition(() => Transition);
+        setOpen(true);
+      };
+      const handleClose = () => {
+        setOpen(false);
+      };
+      return (
+        <div>
+          <ButtonGroup size="small" aria-label="small outlined button group">
+            <Button onClick={handleClick(TransitionLeft)}>Right</Button>
+            <Button onClick={handleClick(TransitionUp)}>Up</Button>
+            <Button onClick={handleClick(TransitionRight)}>Left</Button>
+            <Button onClick={handleClick(TransitionDown)}>Down</Button>
+          </ButtonGroup>  
+          <Snackbar
+            open={open}
+            onClose={handleClose}
+            TransitionComponent={transition}
+            message="I love snacks"
+            key={transition ? transition.name : ''}
+          />
+        </div>
+      );
+    }
+
+  </script>
+
+  </head>
+  <body>
+    <div id="root" > wait ...</div>
+    <script type="text/babel"crossorigin >
+      const {
+        Button,
+        TextField,
+        IconButton,
+        Snackbar ,
+        SnackbarContent ,
+        CloseIcon,
+        ButtonGroup,
+        Slide,
+      } = MaterialUI;
+      //JSX
+      ReactDOM.render(
+        <App/>,
+        document.querySelector('#root')
+        );
+    </script>
+
+  </body>
+</html>
